@@ -11,6 +11,15 @@ import (
 	"time"
 )
 
+func countAverage(arr []int) int {
+	sum := 0
+	for i := 0; i < len(arr); i++ {
+		sum += arr[i]
+	}
+
+	return sum / len(arr)
+}
+
 func main() {
 	rand.Seed(time.Now().Unix())
 
@@ -56,4 +65,7 @@ func main() {
 			randomized = rand.Intn(100) + 1
 		}
 	}
+
+	arr := []int{10, 23, 455, 332, 1}
+	fmt.Print(countAverage(arr))
 }
