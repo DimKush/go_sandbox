@@ -1,71 +1,27 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"math/rand"
-	"os"
 	"strconv"
-	"strings"
-	"time"
+
+	"go_sandbox/datafile"
 )
 
-func countAverage(arr []int) int {
-	sum := 0
-	for i := 0; i < len(arr); i++ {
-		sum += arr[i]
-	}
-
-	return sum / len(arr)
-}
-
 func main() {
-	rand.Seed(time.Now().Unix())
+	println("beg")
+	numbers, err := datafile.GetFloats("data.txt")
 
-	randomized := rand.Intn(100) + 1
-
-	fmt.Println()
-
-	for {
-
-		fmt.Print("Enter a number from 1 to 100: ")
-		reader := bufio.NewReader(os.Stdin)
-
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Printf("Incorrect input %s", err)
-			continue
-		}
-
-		input = strings.TrimSpace(input)
-		fmt.Print(input)
-
-		inputNum, err := strconv.Atoi(input)
-		if err != nil || inputNum > 100 || inputNum < 0 {
-			log.Fatal("Incorrect number")
-		}
-
-		if inputNum == randomized {
-			fmt.Println("Congratulations, you guessed a randomized number.", randomized)
-		} else {
-			fmt.Println("Sorry, you couldn't guess a randomized number : ", randomized)
-		}
-
-		fmt.Print("Continue? yes/no? : ")
-		reader = bufio.NewReader(os.Stdin)
-		input, err = reader.ReadString('\n')
-
-		input = strings.TrimSpace(input)
-		input = strings.ToLower(input)
-
-		if input == "no" {
-			break
-		} else if input == "yes" {
-			randomized = rand.Intn(100) + 1
-		}
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	arr := []int{10, 23, 455, 332, 1}
-	fmt.Print(countAverage(arr))
+	var sum float64 = 0
+
+	for _, param := range numbers {
+		sum += param
+	}
+
+	fmt.Println("Averange of all values", strconv.FormatFloat(sum/float64(len(numbers)), 'f', 2, 64))
+	fmt.Println("Sum from all values in file ", sum)
 }
