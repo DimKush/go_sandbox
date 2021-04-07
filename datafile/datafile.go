@@ -2,33 +2,31 @@ package datafile
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 )
 
-func GetFloats(filename string) ([3]float64, error) {
-	var nums [3]float64
+func GetFloats(filename string) ([]float64, error) {
+	var nums []float64
 
 	file, err := os.Open(filename)
 	if err != nil {
 		//log.Fatal("Cannot read file.", err)
-		return nums, err
+		return nil, err
 	}
 
 	scanner := bufio.NewScanner(file)
 
 	i := 0
 	for scanner.Scan() {
-		if i >= len(nums) {
-			log.Println("ATTENTION: array override")
-			i = 0
+		val, err := strconv.ParseFloat(scanner.Text(), 64)
+		if err != nil {
+			return nil, err
 		}
 
-		nums[i], err = strconv.ParseFloat(scanner.Text(), 64)
-		if err != nil {
-			return nums, err
-		}
+		nums = append(nums, val)
 
 		i++
 	}
@@ -41,6 +39,7 @@ func GetFloats(filename string) ([3]float64, error) {
 	if err != nil {
 		log.Fatal("Cannot close file.", err)
 	}
+	fmt.Println("Nums from file : ", nums)
 
 	return nums, err
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"reflect"
 	"strconv"
 
 	"go_sandbox/datafile"
@@ -11,6 +12,8 @@ import (
 func main() {
 	println("beg")
 	numbers, err := datafile.GetFloats("data.txt")
+
+	fmt.Println(reflect.TypeOf(numbers))
 
 	if err != nil {
 		log.Fatal(err)
@@ -24,4 +27,5 @@ func main() {
 
 	fmt.Println("Averange of all values", strconv.FormatFloat(sum/float64(len(numbers)), 'f', 2, 64))
 	fmt.Println("Sum from all values in file ", sum)
+
 }
