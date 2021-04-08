@@ -14,7 +14,8 @@ func main() {
 	numbers, err := datafile.GetFloats("data.txt")
 
 	fmt.Println(reflect.TypeOf(numbers))
-
+	fmt.Println(len(numbers))
+	fmt.Println(reflect.TypeOf(datafile.GetArr()))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,4 +29,12 @@ func main() {
 	fmt.Println("Averange of all values", strconv.FormatFloat(sum/float64(len(numbers)), 'f', 2, 64))
 	fmt.Println("Sum from all values in file ", sum)
 
+	mapIp, err := datafile.ReadString("table.csv")
+
+	if err != nil {
+		log.Fatal("Error read ip from file")
+
+	}
+
+	fmt.Println(mapIp)
 }
