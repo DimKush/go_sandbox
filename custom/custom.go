@@ -2,13 +2,33 @@ package custom
 
 import (
 	"fmt"
+	"go_sandbox/calendar"
+	"log"
+	"time"
 )
 
-func Print() {
-	fmt.Println("Debug")
+func print(date *calendar.Date) {
+	fmt.Println(date.GetYear(), date.GetMonth(), date.GetDay())
 }
 
-func CalcValues(num int, num2 int) (sum int) {
-	sum = num + num2
-	return
+func Process() {
+	var date calendar.Date
+
+	err := date.SetDay(time.Now().Day())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = date.SetMonth(int(time.Now().Month()))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = date.SetYear(time.Now().Year())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	print(&date)
+
 }
