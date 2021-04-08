@@ -8,6 +8,11 @@ import (
 	"strconv"
 )
 
+func GetArr() [10]int {
+	arr := [10]int{}
+	return arr
+}
+
 func GetFloats(filename string) ([]float64, error) {
 	var nums []float64
 

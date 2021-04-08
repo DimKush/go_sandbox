@@ -14,7 +14,8 @@ func main() {
 	numbers, err := datafile.GetFloats("data.txt")
 
 	fmt.Println(reflect.TypeOf(numbers))
-
+	fmt.Println(len(numbers))
+	fmt.Println(reflect.TypeOf(datafile.GetArr()))
 	if err != nil {
 		log.Fatal(err)
 	}
