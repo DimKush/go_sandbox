@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strconv"
 
+	"go_sandbox/custom"
 	"go_sandbox/datafile"
 )
 
@@ -37,4 +38,5 @@ func main() {
 	}
 
 	fmt.Println(mapIp)
+	custom.Process()
 }
