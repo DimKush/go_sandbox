@@ -70,4 +70,10 @@ func main() {
 	playlist(player, mixtape)
 	TryOut(tapego.TapeRecorder{})
 	//TryOut(tapego.TapePlayer{})
+
+	err = datafile.TreeSubDir("/home/dim/Desktop/cpp/dir")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Print("\n")
 }
