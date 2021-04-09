@@ -8,7 +8,29 @@ import (
 
 	"go_sandbox/custom"
 	"go_sandbox/datafile"
+	tapego "go_sandbox/gadget"
 )
+
+type player interface {
+	Play(string)
+	Stop()
+}
+
+func playlist(device player, songlist []string) {
+	for _, song := range songlist {
+		device.Play(song)
+	}
+	device.Stop()
+}
+
+func TryOut(pl player) {
+	pl.Play("Track")
+	pl.Stop()
+
+	fmt.Println(reflect.TypeOf(pl))
+	recorder := pl.(tapego.TapeRecorder)
+	recorder.Record()
+}
 
 func main() {
 	println("beg")
@@ -39,6 +61,15 @@ func main() {
 
 	fmt.Println(mapIp)
 	custom.Process()
+
+	var player player = tapego.TapePlayer{}
+	mixtape := []string{"Calling all Arms", "Sad but true", "Gorillaz"}
+	playlist(player, mixtape)
+
+	player = tapego.TapeRecorder{}
+	playlist(player, mixtape)
+	TryOut(tapego.TapeRecorder{})
+	//TryOut(tapego.TapePlayer{})
 
 	err = datafile.TreeSubDir("/home/dim/Desktop/cpp/dir")
 	if err != nil {
