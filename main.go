@@ -39,4 +39,10 @@ func main() {
 
 	fmt.Println(mapIp)
 	custom.Process()
+
+	err = datafile.TreeSubDir("/home/dim/Desktop/cpp/dir")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Print("\n")
 }
