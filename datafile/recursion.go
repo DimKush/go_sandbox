@@ -3,18 +3,31 @@ package datafile
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 	"strings"
 )
 
 var deepLevel int = 0
 
-func TreeSubDir(path string) error {
+func ReportPanic() {
+	rec := recover()
+	if rec == nil {
+		return
+	}
+
+	err, ok := rec.(error)
+	if ok {
+		fmt.Println(err)
+	} else {
+		panic(rec)
+	}
+
+}
+
+func TreeSubDir(path string) {
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
-		log.Fatal("Error during reading filesystem:", err)
-		return err
+		panic(err)
 	}
 
 	var levels strings.Builder
@@ -33,11 +46,8 @@ func TreeSubDir(path string) error {
 			dirPath := filepath.Join(path, file.Name())
 			fmt.Printf("\n%s%s/", levels.String(), file.Name())
 
-			err := TreeSubDir(dirPath)
-			if err != nil {
-				log.Fatal("Error during reading filesystem:", err)
-				return err
-			}
+			TreeSubDir(dirPath)
+
 		} else {
 			filesStr = append(filesStr, file.Name())
 		}
@@ -48,5 +58,4 @@ func TreeSubDir(path string) error {
 	}
 
 	deepLevel = 0
-	return nil
 }

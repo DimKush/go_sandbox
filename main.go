@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"reflect"
 	"strconv"
 
@@ -33,6 +34,7 @@ func TryOut(pl player) {
 }
 
 func main() {
+	args := os.Args
 	println("beg")
 	numbers, err := datafile.GetFloats("data.txt")
 
@@ -71,9 +73,14 @@ func main() {
 	TryOut(tapego.TapeRecorder{})
 	//TryOut(tapego.TapePlayer{})
 
-	err = datafile.TreeSubDir("/home/dim/Desktop/cpp/dir")
-	if err != nil {
-		log.Fatal(err)
+	if len(args) < 2 {
+		log.Fatal("Error: program running without arguments. args =", args)
+	} else if len(args) > 2 {
+		log.Fatal("Too few arguments. args =", args)
 	}
+
+	defer datafile.ReportPanic()
+	datafile.TreeSubDir(string(args[1]))
+
 	fmt.Print("\n")
 }
