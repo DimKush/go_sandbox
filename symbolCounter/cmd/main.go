@@ -29,5 +29,9 @@ func main() {
 	}
 
 	str, err = counter.UnpackString("a4bc2d5e")
-	//str, err = counter.UnpackString(`qwe\4\5`)
+	fmt.Println(str)
+	str, err = counter.UnpackString("abcd")
+	fmt.Println(str)
+	str, err = counter.UnpackString(`qwe\4\5`)
+	fmt.Println(str)
 }

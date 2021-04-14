@@ -82,11 +82,33 @@ func UnpackString(str string) (string, error) {
 			} else {
 				mpLetters[runes[i]] = 1
 			}
+		} else if runes[i] == 92 { // if runes[i] == '\'
+			if v := i + 2; v < len(runes) && unicode.IsNumber(runes[i+2]) {
+				mpLetters[runes[i+1]] = int(runes[i+2] - '0')
+			}
 		}
 	}
 	for r, val := range mpLetters {
 		fmt.Printf("%c = %d ", r, val)
 	}
 
-	return "", nil
+	//sort keys
+	keys := make([]rune, 0, len(runes))
+	for _, k := range runes {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return keys[i] < keys[j]
+	})
+
+	// build string
+	var finStr strings.Builder
+	for _, val := range keys {
+		count := mpLetters[val]
+		for i := 0; i < count; i++ {
+			finStr.WriteRune(val)
+		}
+	}
+
+	return finStr.String(), nil
 }
