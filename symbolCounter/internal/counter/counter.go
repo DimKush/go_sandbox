@@ -2,7 +2,6 @@ package counter
 
 import (
 	"errors"
-	"fmt"
 	"sort"
 	"strconv"
 	"strings"
@@ -94,10 +93,6 @@ func UnpackString(str string) (string, error) {
 				sliceLetters = append(sliceLetters, letterSymb{symbol: runes[i+1], count: 1})
 			}
 		}
-	}
-
-	for _, unit := range sliceLetters {
-		fmt.Printf(" %c = %d ", unit.symbol, unit.count)
 	}
 
 	// build string
