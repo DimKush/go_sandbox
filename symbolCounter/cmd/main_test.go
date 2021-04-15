@@ -58,16 +58,16 @@ func TestCheckForLetters(t *testing.T) {
 	}
 }
 
-func PackLetters(t *testing.T) {
+func TestPackLetters(t *testing.T) {
 	s := "aaaabccddddde"
 	strExpected := "a4bc2d5e"
 
-	str, err := counter.UnpackString(s)
+	str, err := counter.PackLetters(s)
 	if err != nil {
 		t.Fatalf("Error during counter.PackLetters (s):  %s", err.Error())
 	}
 
 	if str != strExpected || err != nil {
-		t.Fatalf("Bad UnpackString for %s. Got %s expected %s", s, str, strExpected)
+		t.Fatalf("Bad PackLetters for %s. Got %s expected %s", s, str, strExpected)
 	}
 }
