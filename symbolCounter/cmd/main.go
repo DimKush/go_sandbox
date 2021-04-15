@@ -7,21 +7,21 @@ import (
 )
 
 func main() {
-	str, err := counter.CountLetters("aaaabccddddde")
+	str, err := counter.PackLetters("aaaabccddddde")
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(str)
 	}
 
-	str, err = counter.CountLetters("abcd")
+	str, err = counter.PackLetters("abcd")
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(str)
 	}
 
-	str, err = counter.CountLetters("45")
+	str, err = counter.PackLetters("45")
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -34,4 +34,9 @@ func main() {
 	fmt.Println(str)
 	str, err = counter.UnpackString(`qwe\4\5`)
 	fmt.Println(str)
+	str, err = counter.UnpackString(`qwe\45`)
+	fmt.Println(str)
+	str, err = counter.UnpackString(`qwe\\5`)
+	fmt.Println(str)
+
 }

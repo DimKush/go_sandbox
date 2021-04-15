@@ -9,7 +9,12 @@ import (
 	"unicode"
 )
 
-func checkForLetters(str *string) error {
+type letterSymb struct {
+	symbol rune
+	count  int
+}
+
+func CheckForLetters(str *string) error {
 	//check if string has letters
 	for _, runeVal := range *str {
 		if unicode.IsLetter(runeVal) {
@@ -20,8 +25,8 @@ func checkForLetters(str *string) error {
 	return errors.New("No letters in string.")
 }
 
-func CountLetters(str string) (string, error) {
-	err := checkForLetters(&str)
+func PackLetters(str string) (string, error) {
+	err := CheckForLetters(&str)
 	if err != nil {
 		return "", err
 	}
@@ -63,7 +68,7 @@ func CountLetters(str string) (string, error) {
 }
 
 func UnpackString(str string) (string, error) {
-	err := checkForLetters(&str)
+	err := CheckForLetters(&str)
 	if err != nil {
 		return "", err
 	}
@@ -71,42 +76,35 @@ func UnpackString(str string) (string, error) {
 	// pack to slice of runes
 	runes := []rune(str)
 
-	mpLetters := make(map[rune]int)
-	// check every rune
+	var sliceLetters []letterSymb
 
 	for i := 0; i < len(runes); i++ {
 		if unicode.IsLetter(runes[i]) {
 			if v := i + 1; v < len(runes) && unicode.IsNumber(runes[i+1]) {
-				mpLetters[runes[i]] = int(runes[i+1] - '0')
+				sliceLetters = append(sliceLetters, letterSymb{symbol: runes[i], count: int(runes[i+1] - '0')})
 				i++
 			} else {
-				mpLetters[runes[i]] = 1
+				sliceLetters = append(sliceLetters, letterSymb{symbol: runes[i], count: 1})
 			}
-		} else if runes[i] == 92 { // if runes[i] == '\'
+		} else if runes[i] == 92 {
 			if v := i + 2; v < len(runes) && unicode.IsNumber(runes[i+2]) {
-				mpLetters[runes[i+1]] = int(runes[i+2] - '0')
+				sliceLetters = append(sliceLetters, letterSymb{symbol: runes[i+1], count: int(runes[i+2] - '0')})
+				i++
+			} else {
+				sliceLetters = append(sliceLetters, letterSymb{symbol: runes[i+1], count: 1})
 			}
 		}
 	}
-	for r, val := range mpLetters {
-		fmt.Printf("%c = %d ", r, val)
-	}
 
-	//sort keys
-	keys := make([]rune, 0, len(runes))
-	for _, k := range runes {
-		keys = append(keys, k)
+	for _, unit := range sliceLetters {
+		fmt.Printf(" %c = %d ", unit.symbol, unit.count)
 	}
-	sort.Slice(keys, func(i, j int) bool {
-		return keys[i] < keys[j]
-	})
 
 	// build string
 	var finStr strings.Builder
-	for _, val := range keys {
-		count := mpLetters[val]
-		for i := 0; i < count; i++ {
-			finStr.WriteRune(val)
+	for _, val := range sliceLetters {
+		for i := 0; i < val.count; i++ {
+			finStr.WriteRune(val.symbol)
 		}
 	}
 
