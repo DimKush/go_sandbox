@@ -2,6 +2,7 @@ package analyzer
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"unicode"
 )
@@ -37,19 +38,17 @@ func cutStringOnWords(str string) []string {
 	return clearWordsFromPunct(words)
 }
 
-func searchInSliceCountWords(word string, slc []wordCount) int {
-	for index, str := range slc {
-		if str.word == word {
-			return index
-		}
-	}
-	return len(slc)
-}
 func Analyzer(str string) {
 	words := cutStringOnWords(str)
 	var sliceCountWords []wordCount
+
+	sort.Slice(words, func(i, j int) bool {
+		return words[i] <= words[j]
+	})
 	for _, wordColl := range words {
-		idx := searchInSliceCountWords(wordColl, sliceCountWords)
+		idx := sort.Search(len(sliceCountWords), func(i int) bool {
+			return sliceCountWords[i].word == wordColl
+		})
 		// if not found
 		if idx == len(sliceCountWords) {
 			sliceCountWords = append(sliceCountWords, wordCount{word: wordColl, count: 1})
