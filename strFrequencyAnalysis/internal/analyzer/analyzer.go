@@ -38,10 +38,6 @@ func cutStringOnWords(str string) []string {
 	return clearWordsFromPunct(words)
 }
 
-func wordFormCheck(str string) {
-
-}
-
 func Analyzer(str string) {
 	words := cutStringOnWords(str)
 	var sliceCountWords []wordCount
