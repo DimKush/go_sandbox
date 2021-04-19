@@ -21,3 +21,11 @@ func (d *BidirNode) SetNext(nxt *BidirNode) {
 func (d *BidirNode) SetPrev(prv *BidirNode) {
 	d.prev = prv.prev
 }
+
+func (d *BidirNode) GetNext() *BidirNode {
+	return d.next
+}
+
+func (d *BidirNode) GetPrev() *BidirNode {
+	return d.prev
+}
