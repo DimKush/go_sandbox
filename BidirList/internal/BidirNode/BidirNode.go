@@ -1,16 +1,20 @@
 package BidirNode
 
+import "reflect"
+
 type BidirNode struct {
-	data int
-	prev *BidirNode
-	next *BidirNode
+	data     interface{}
+	dataType reflect.Type
+	prev     *BidirNode
+	next     *BidirNode
 }
 
 func ConstructNode(dataIn int) *BidirNode {
 	return &BidirNode{data: dataIn}
 }
 
-func (d *BidirNode) SetData(val int) {
+func (d *BidirNode) SetData(val interface{}) {
+
 	d.data = val
 }
 
