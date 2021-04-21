@@ -2,35 +2,16 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"reflect"
+
+	"github.com/DimKush/go_sandbox/tree/main/BidirList/internal/BidirList"
 )
 
-type X struct {
-	data     interface{}
-	dataType reflect.Type
-}
-
-func (x *X) showType() {
-	fmt.Println(reflect.TypeOf(x.data))
-}
-
-func (x *X) insert(i interface{}) {
-	if x.data == nil {
-		x.dataType = reflect.TypeOf(i)
-		x.data = i
-	}
-
-	if reflect.TypeOf(i) != x.dataType {
-		log.Fatal("Wrong type")
-	}
-
-	x.data = i
-}
-
 func main() {
-	var v X
-	v.insert(10)
-	v.insert("10")
-	v.showType()
+	customList := BidirList.BidirList{}
+	err := customList.ConstructList([]interface{}{12, 23, 56})
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(customList.Len())
 }
