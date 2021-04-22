@@ -5,14 +5,12 @@ import (
 	"reflect"
 
 	"errors"
-
-	"github.com/DimKush/go_sandbox/tree/main/BidirList/internal/BidirNode"
 )
 
 type BidirList struct {
 	typeData reflect.Type
-	bottom   *BidirNode.BidirNode
-	top      *BidirNode.BidirNode
+	bottom   *BidirNode
+	top      *BidirNode
 }
 
 func (d *BidirList) ConstructList(sli []interface{}) error {
@@ -54,21 +52,21 @@ func (d *BidirList) PushBack(val interface{}) error {
 	if d.top != nil {
 		current := d.top
 
-		for current.Next != d.bottom {
-			current = current.Next
+		for current.next != d.bottom {
+			current = current.next
 		}
 
-		current.Next = new(BidirNode.BidirNode)
-		current.Next.SetData(val)
-		current.Next.Prev = current
-		current.Next.Next = d.bottom
-		d.bottom.Prev = current.Next
+		current.next = new(BidirNode)
+		current.next.setData(val)
+		current.next.prev = current
+		current.next.next = d.bottom
+		d.bottom.prev = current.next
 
 	} else {
 
-		d.top = new(BidirNode.BidirNode)
-		d.bottom = new(BidirNode.BidirNode)
-		d.top.Next = d.bottom
+		d.top = new(BidirNode)
+		d.bottom = new(BidirNode)
+		d.top.next = d.bottom
 		d.PushBack(val)
 	}
 
@@ -89,21 +87,21 @@ func (d *BidirList) PushFront(val interface{}) error {
 	if d.bottom != nil {
 		current := d.bottom
 
-		for current.Prev != d.top {
-			current = current.Prev
+		for current.prev != d.top {
+			current = current.prev
 		}
 
-		current.Prev = new(BidirNode.BidirNode)
-		current.Prev.SetData(val)
-		current.Prev.Next = current
-		current.Prev.Prev = d.top
-		d.top.Next = current.Prev
+		current.prev = new(BidirNode)
+		current.prev.setData(val)
+		current.prev.next = current
+		current.prev.prev = d.top
+		d.top.next = current.prev
 
 	} else {
 
-		d.top = new(BidirNode.BidirNode)
-		d.bottom = new(BidirNode.BidirNode)
-		d.top.Next = d.bottom
+		d.top = new(BidirNode)
+		d.bottom = new(BidirNode)
+		d.top.next = d.bottom
 		d.PushFront(val)
 	}
 
@@ -115,13 +113,13 @@ func (d *BidirList) List() reflect.Type {
 }
 
 func (d *BidirList) Len() int {
-	curNode := d.top.Next
+	curNode := d.top.next
 	var count int
-	if curNode != nil || curNode.Next != d.bottom {
+	if curNode != nil || curNode.next != d.bottom {
 		for curNode != d.bottom {
 			//fmt.Println(curNode.GetData())
 			count++
-			curNode = curNode.Next
+			curNode = curNode.next
 
 		}
 	} else {
@@ -130,32 +128,32 @@ func (d *BidirList) Len() int {
 	return count
 }
 
-func (d *BidirList) Remove(i *BidirNode.BidirNode) {
-	cur := d.top.Next
+func (d *BidirList) Remove(i *BidirNode) {
+	cur := d.top.next
 
 	for cur != d.bottom {
 		if i == cur {
-			cur.Prev.Next = cur.Next
-			cur.Next.Prev = cur.Prev
+			cur.prev.next = cur.next
+			cur.next.prev = cur.prev
 			break
 		}
-		cur = cur.Next
+		cur = cur.next
 	}
 }
 
-func (d *BidirList) First() *BidirNode.BidirNode {
-	return d.top.Next
+func (d *BidirList) First() *BidirNode {
+	return d.top.next
 }
 
-func (d *BidirList) Last() *BidirNode.BidirNode {
-	return d.bottom.Prev
+func (d *BidirList) Last() *BidirNode {
+	return d.bottom.prev
 }
 
 func (d *BidirList) Show() {
-	cur := d.top.Next
+	cur := d.top.next
 	for cur != d.bottom {
-		fmt.Printf("%v ", cur.Value())
-		cur = cur.Next
+		fmt.Printf("%v ", cur.GetData())
+		cur = cur.next
 	}
 	fmt.Print("\n")
 }

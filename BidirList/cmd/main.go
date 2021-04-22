@@ -13,10 +13,11 @@ func main() {
 		fmt.Println(err)
 	}
 	customList.PushBack(100)
+	customList.PushBack(1000)
 	customList.PushFront(10)
 
 	cur := customList.Last()
-	cur.Next = cur.Prev
+	cur = cur.Prev()
 	customList.Remove(cur)
 
 	customList.Show()
