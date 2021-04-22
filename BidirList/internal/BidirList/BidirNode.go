@@ -5,21 +5,29 @@ import "reflect"
 type BidirNode struct {
 	data     interface{}
 	dataType reflect.Type
-	Prev     *BidirNode
-	Next     *BidirNode
+	prev     *BidirNode
+	next     *BidirNode
 }
 
-func ConstructNode(dataIn int) *BidirNode {
+func constructNode(dataIn int) *BidirNode {
 	return &BidirNode{data: dataIn}
 }
 
-func (d *BidirNode) SetData(val interface{}) {
+func (d *BidirNode) setData(val interface{}) {
 
 	d.data = val
 }
 
-func (d *BidirNode) Value() interface{} {
+func (d *BidirNode) GetData() interface{} {
 	return d.data
+}
+
+func (d *BidirNode) Next() *BidirNode {
+	return d.next
+}
+
+func (d *BidirNode) Prev() *BidirNode {
+	return d.prev
 }
 
 // func (d *BidirNode) SetNext(nxt *BidirNode) {
