@@ -1,4 +1,4 @@
-package BidirNode
+package BidirList
 
 import "reflect"
 
@@ -18,7 +18,7 @@ func (d *BidirNode) SetData(val interface{}) {
 	d.data = val
 }
 
-func (d *BidirNode) GetData() interface{} {
+func (d *BidirNode) Value() interface{} {
 	return d.data
 }
 
