@@ -12,6 +12,14 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	customList.PushBack(100)
+	customList.PushFront(10)
 
+	cur := customList.Last()
+	cur.Next = cur.Prev
+	customList.Remove(cur)
+
+	customList.Show()
 	fmt.Println(customList.Len())
+	fmt.Println(customList.List())
 }
