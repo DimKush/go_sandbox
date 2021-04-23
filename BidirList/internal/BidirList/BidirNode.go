@@ -23,10 +23,16 @@ func (d *BidirNode) GetData() interface{} {
 }
 
 func (d *BidirNode) Next() *BidirNode {
+	if d.next == nil {
+		return d
+	}
 	return d.next
 }
 
 func (d *BidirNode) Prev() *BidirNode {
+	if d.prev == nil {
+		return d
+	}
 	return d.prev
 }
 
