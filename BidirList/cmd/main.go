@@ -15,6 +15,7 @@ func main() {
 	customList.PushBack(100)
 	customList.PushBack(1000)
 	customList.PushFront(10)
+	customList.PushFront(1000)
 
 	cur := customList.Last()
 	cur = cur.Prev()
