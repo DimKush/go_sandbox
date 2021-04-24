@@ -2,6 +2,7 @@ package BidirList
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 
 	"errors"
@@ -29,24 +30,20 @@ func (d *BidirList) ConstructList(sli []interface{}) error {
 	}
 
 	for _, val := range sli {
-		err := d.PushBack(val)
-		if err != nil {
-			return err
-		}
+		d.PushBack(val)
 	}
 
 	return nil
 }
 
-func (d *BidirList) PushBack(val interface{}) error {
+func (d *BidirList) PushBack(val interface{}) {
 	// detect type in first time
 	if d.typeData == nil {
 		d.typeData = reflect.TypeOf(val)
 	}
 	// check type
 	if reflect.TypeOf(val) != d.typeData {
-		//errors.Errorf("Wrong type in slice : %s. Current type of List is %s", reflect.TypeOf(val), d.typeData)
-		return errors.New("error")
+		log.Fatalf("Wrong type PushFront() : %s. Current type of List is %s", reflect.TypeOf(val), d.typeData)
 	}
 
 	if d.top != nil {
@@ -69,19 +66,16 @@ func (d *BidirList) PushBack(val interface{}) error {
 		d.top.next = d.bottom
 		d.PushBack(val)
 	}
-
-	return nil
 }
 
-func (d *BidirList) PushFront(val interface{}) error {
+func (d *BidirList) PushFront(val interface{}) {
 	// detect type in first time
 	if d.typeData == nil {
 		d.typeData = reflect.TypeOf(val)
 	}
 	// check type
 	if reflect.TypeOf(val) != d.typeData {
-		//errors.Errorf("Wrong type in slice : %s. Current type of List is %s", reflect.TypeOf(val), d.typeData)
-		return errors.New("error")
+		log.Fatalf("Wrong type PushFront() : %s. Current type of List is %s", reflect.TypeOf(val), d.typeData)
 	}
 
 	if d.bottom != nil {
@@ -96,16 +90,13 @@ func (d *BidirList) PushFront(val interface{}) error {
 		current.prev.next = current
 		current.prev.prev = d.top
 		d.top.next = current.prev
-
 	} else {
-
 		d.top = new(BidirNode)
 		d.bottom = new(BidirNode)
 		d.top.next = d.bottom
+		d.bottom.prev = d.top
 		d.PushFront(val)
 	}
-
-	return nil
 }
 
 func (d *BidirList) List() reflect.Type {

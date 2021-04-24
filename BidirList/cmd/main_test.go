@@ -8,11 +8,7 @@ import (
 
 func TestPushBack(t *testing.T) {
 	testList := BidirList.BidirList{}
-	err := testList.PushBack(10)
-
-	if err != nil {
-		t.Error(err)
-	}
+	testList.PushBack(10)
 
 	if testList.First().GetData() != 10 {
 		t.Error("Error in TestPushBack")
@@ -21,15 +17,12 @@ func TestPushBack(t *testing.T) {
 
 func TestPushFront(t *testing.T) {
 	testList := BidirList.BidirList{}
-	err := testList.PushBack(10)
-	err = testList.PushBack(20)
+	testList.PushFront(10)
+	testList.PushFront(20)
+	testList.PushFront(30)
 
-	if err != nil {
-		t.Error(err)
-	}
-
-	if testList.Last().GetData() != 20 {
-		t.Error("Error in TestPushBack")
+	if testList.First().GetData() != 30 {
+		t.Error("Error in TestPushFront")
 	}
 }
 
