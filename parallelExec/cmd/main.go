@@ -3,29 +3,23 @@ package main
 import (
 	"fmt"
 	"time"
+
+	create_task "github.com/DimKush/go_sandbox/tree/main/parallelExec/internal/createTasks"
 )
 
+func parallelExec(slc []func(v int) (int, error)) {
+	fmt.Println("Go")
+	val := 0
+	for _, fu := range slc {
+		go fu(val)
+
+		val++
+	}
+
+}
+
 func main() {
-	go spinner(100 * time.Millisecond)
-	const n = 45
-	fibN := fib(n)
-
-	fmt.Println(fibN)
-}
-
-func spinner(delay time.Duration) {
-	for {
-		for _, r := range `-\|/` {
-			fmt.Printf("\r%c", r)
-			time.Sleep(delay)
-		}
-	}
-}
-
-func fib(x int) int {
-	if x < 2 {
-		return x
-	} else {
-		return fib(x-1) + fib(x-2)
-	}
+	tasks := create_task.CreateTask(10)
+	parallelExec(tasks)
+	time.Sleep(30 * time.Second)
 }

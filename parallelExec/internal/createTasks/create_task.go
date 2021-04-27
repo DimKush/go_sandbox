@@ -3,31 +3,45 @@ package create_task
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
+	"time"
 )
 
-func CreateTask(sizeTasks int) []func() {
-	var taskSlice []func()
+var tracV tracker
 
-	for i := 0; i <= sizeTasks; i++ {
-		taskSlice = append(taskSlice, func(v int) int, error{})
+func CreateTask(TasksCount int) []func(v int) (int, error) {
+	var taskSlice []func(v int) (int, error)
+
+	for i := 0; i <= TasksCount; i++ {
+		taskSlice = append(taskSlice, func(v int) (int, error) {
+			//tracV.log_units = append(tracV.log_units, tracker_unit{fibVal: v, procTrack: ""})
+			//go tracV.show()
+			val, err := countFib(v)
+			if err != nil {
+				return 0, nil
+			}
+
+			return val, err
+		})
 	}
 
+	return taskSlice
 }
 
 func showProcess(num int) {
-	fmt.Printf("\n Process fib of number(%d):", num)
+	str := "Process fib of number :" + strconv.Itoa(num)
 
 	var strBuf strings.Builder
 
 	for {
 		strBuf.Reset()
-		for i := 0; i < 10; i++ {
+		for i := 0; i < 100; i++ {
 			strBuf.WriteRune('#')
-			fmt.Printf("\r%s", strBuf)
+			fmt.Printf("%s %s\n", str, strBuf.String())
+			time.Sleep(1 * time.Second)
 		}
 	}
-
 }
 
 func countFib(val int) (int, error) {
