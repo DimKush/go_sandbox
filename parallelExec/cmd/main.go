@@ -2,27 +2,53 @@ package main
 
 import (
 	"fmt"
+	"sort"
+	"sync"
 	"time"
 
-	create_task "github.com/DimKush/go_sandbox/tree/main/parallelExec/internal/createTasks"
+	crtk "github.com/DimKush/go_sandbox/tree/main/parallelExec/internal/createTasks"
 )
 
-func parallelExec(slc []func(v int) (int, error)) {
+var WG_MAIN sync.WaitGroup
+
+func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit, wg *sync.WaitGroup)) {
+	var wg sync.WaitGroup
 	fmt.Println("Go")
 	val := 0
 
-	ch := make(chan int, len(slc))
-
+	ch := make(chan crtk.Tracker_unit, len(slc))
+	fmt.Println(len(slc))
 	for _, fu := range slc {
-		go fu(val)
+		wg.Add(1)
+		go fu(val+1, ch, &wg)
 
 		val++
 	}
 
+	wg.Wait()
+	close(ch)
+
+	var resSlc []crtk.Tracker_unit
+	for x := range ch {
+		resSlc = append(resSlc, x)
+	}
+	sort.Slice(resSlc, func(i, j int) bool {
+		return resSlc[i].FibVal < resSlc[j].FibVal
+	})
+
+	for _, v := range resSlc {
+		fmt.Printf("value : %d result : %d operations: %d time: %v\n", v.FibVal, v.FinResult, v.Operations, v.ExecutionResTime)
+	}
+
+	WG_MAIN.Done()
 }
 
 func main() {
-	tasks := create_task.CreateTask(10)
+	start := time.Now()
+	tasks := crtk.CreateTask(100)
+	WG_MAIN.Add(1)
+
 	parallelExec(tasks)
-	time.Sleep(30 * time.Second)
+	fmt.Printf("Execution time : %v\n", time.Since(start))
+	WG_MAIN.Wait()
 }

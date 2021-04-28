@@ -1,42 +1,39 @@
 package create_task
 
 import (
-	"fmt"
-	"strconv"
-	"strings"
+	"sync"
 	"time"
 )
 
-func CreateTask(TasksCount int) []func(v int, progress_Tracker *Tracker) (int, error) {
-	var taskSlice []func(v int, progress_Tracker *Tracker) (int, error)
+type Tracker_unit struct {
+	FibVal           int
+	ExecutionResTime time.Duration
+	FinResult        int
+	Operations       int
+}
 
-	for i := 0; i <= TasksCount; i++ {
-		taskSlice = append(taskSlice, func(v int, progress_Tracker *Tracker) (int, error) {
-			// get a state of fibVal to show state on screen
-			// in this function v variable was send as a copy, don't worry about the data mutation:)
+func CreateTask(TasksCount int) []func(v int, ch chan<- Tracker_unit, wg *sync.WaitGroup) {
+	var taskSlice []func(v int, ch chan<- Tracker_unit, wg *sync.WaitGroup)
+
+	for i := 1; i <= TasksCount; i++ {
+
+		taskSlice = append(taskSlice, func(v int, ch chan<- Tracker_unit, wg *sync.WaitGroup) {
+			defer wg.Done()
+			start := time.Now()
+
+			oprs := 0
+			resVal := countFib(v, &oprs)
+
+			ch <- Tracker_unit{FibVal: v, ExecutionResTime: time.Since(start), FinResult: resVal, Operations: oprs}
 
 		})
 	}
-
 	return taskSlice
 }
 
-func showProcess(num int) {
-	str := "Process fib of number :" + strconv.Itoa(num)
+func countFib(val int, operations *int) int {
+	*operations += 1
 
-	var strBuf strings.Builder
-
-	for {
-		strBuf.Reset()
-		for i := 0; i < 100; i++ {
-			strBuf.WriteRune('#')
-			fmt.Printf("%s %s\n", str, strBuf.String())
-			time.Sleep(1 * time.Second)
-		}
-	}
-}
-
-func countFib(val int) int {
 	if val == 0 {
 		return 0
 	}
@@ -44,7 +41,7 @@ func countFib(val int) int {
 	if val < 2 {
 		return val
 	} else {
-		return countFib(val-1) - countFib(val-2)
+		return countFib(val-1, operations) + countFib(val-2, operations)
 	}
 
 }
