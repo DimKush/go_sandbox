@@ -1,28 +1,20 @@
 package create_task
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
 )
 
-var tracV tracker
-
-func CreateTask(TasksCount int) []func(v int) (int, error) {
-	var taskSlice []func(v int) (int, error)
+func CreateTask(TasksCount int) []func(v int, progress_Tracker *Tracker) (int, error) {
+	var taskSlice []func(v int, progress_Tracker *Tracker) (int, error)
 
 	for i := 0; i <= TasksCount; i++ {
-		taskSlice = append(taskSlice, func(v int) (int, error) {
-			//tracV.log_units = append(tracV.log_units, tracker_unit{fibVal: v, procTrack: ""})
-			//go tracV.show()
-			val, err := countFib(v)
-			if err != nil {
-				return 0, nil
-			}
+		taskSlice = append(taskSlice, func(v int, progress_Tracker *Tracker) (int, error) {
+			// get a state of fibVal to show state on screen
+			// in this function v variable was send as a copy, don't worry about the data mutation:)
 
-			return val, err
 		})
 	}
 
@@ -44,16 +36,15 @@ func showProcess(num int) {
 	}
 }
 
-func countFib(val int) (int, error) {
+func countFib(val int) int {
 	if val == 0 {
-		return 0, errors.New("Fib function argument can't be 0")
+		return 0
 	}
+
 	if val < 2 {
-		return val, nil
+		return val
 	} else {
-		v1, _ := countFib(val - 1)
-		v2, _ := countFib(val - 2)
-		return v1 - v2, nil
+		return countFib(val-1) - countFib(val-2)
 	}
 
 }
