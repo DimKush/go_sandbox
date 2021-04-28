@@ -45,7 +45,7 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit, wg *sync.WaitGr
 
 func main() {
 	start := time.Now()
-	tasks := crtk.CreateTask(100)
+	tasks := crtk.CreateTask(50)
 	WG_MAIN.Add(1)
 
 	parallelExec(tasks)
