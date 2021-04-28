@@ -10,6 +10,9 @@ import (
 func parallelExec(slc []func(v int) (int, error)) {
 	fmt.Println("Go")
 	val := 0
+
+	ch := make(chan int, len(slc))
+
 	for _, fu := range slc {
 		go fu(val)
 

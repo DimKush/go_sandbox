@@ -1,42 +1,40 @@
 package create_task
 
 import (
-	"fmt"
-	"strconv"
-	"sync"
-	"time"
+	"sort"
+	"strings"
+
+	"github.com/buger/goterm"
 )
 
 type tracker_unit struct {
-	fibVal   int
-	prcTrack string
-	prcCount int
+	fibVal      int
+	fibValAddrs *int
+	prcCount    int
 }
 
-func (d *tracker_unit) update() {
-	if d.prcCount > 20 {
-		d.prcTrack = ""
-		d.prcCount = 0
-	}
-
-	d.prcTrack = d.prcTrack + string('#')
-	d.prcCount++
-}
-
-type tracker struct {
+type Tracker struct {
 	log_units []tracker_unit
 }
 
-func (d *tracker) show() {
-	var mutex = &sync.Mutex{}
+func (d *Tracker) updateValStatus(p *int) {
+	idx := sort.Search(len(d.log_units), func(i int) bool {
+		return d.log_units[i].fibValAddrs == p
+	})
 
-	mutex.Lock()
-	for _, v := range d.log_units {
-		str := "Process fib of number : " + strconv.Itoa(v.fibVal)
+	d.log_units[idx].prcCount += 1
+}
 
-		fmt.Printf("\r%s", str)
-		time.Sleep(5 * time.Millisecond)
+func (d *Tracker) Show() {
+	goterm.Clear()
+
+	var strBuf strings.Builder
+	for _, unit := range d.log_units {
+		strBuf.Reset()
+
+		for i := 0; i < unit.prcCount; i++ {
+			strBuf.WriteRune('#')
+		}
 
 	}
-	mutex.Unlock()
 }
