@@ -11,12 +11,12 @@ import (
 
 var WG_MAIN sync.WaitGroup
 
-func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit, wg *sync.WaitGroup)) {
+func parallelExec(slc []func(v int, ch chan<- crtk.Task_Unit, wg *sync.WaitGroup), parallelCount int, errors int) {
 	var wg sync.WaitGroup
 	fmt.Println("Go")
 	val := 0
 
-	ch := make(chan crtk.Tracker_unit, len(slc))
+	ch := make(chan crtk.Task_Unit, len(slc))
 	fmt.Println(len(slc))
 	for _, fu := range slc {
 		wg.Add(1)
@@ -26,9 +26,9 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit, wg *sync.WaitGr
 	}
 
 	wg.Wait()
-	close(ch)
+	//close(ch)
 
-	var resSlc []crtk.Tracker_unit
+	var resSlc []crtk.Task_Unit
 	for x := range ch {
 		resSlc = append(resSlc, x)
 	}
@@ -45,10 +45,10 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit, wg *sync.WaitGr
 
 func main() {
 	start := time.Now()
-	tasks := crtk.CreateTask(50)
+	tasks := crtk.CreateTask(49)
 	WG_MAIN.Add(1)
 
-	parallelExec(tasks)
+	parallelExec(tasks, 10, 3)
 	fmt.Printf("Execution time : %v\n", time.Since(start))
 	WG_MAIN.Wait()
 }
