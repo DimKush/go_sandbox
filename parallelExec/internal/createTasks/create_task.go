@@ -1,9 +1,6 @@
 package create_task
 
 import (
-	"errors"
-	"strconv"
-	"sync"
 	"time"
 )
 
@@ -12,20 +9,15 @@ type Tracker_unit struct {
 	ExecutionResTime time.Duration
 	FinResult        int
 	Operations       int
+	status           error
 }
 
-type Task_Unit struct {
-	unit Tracker_unit
-	err  error
-}
-
-func CreateTask(TasksCount int) []func(v int, ch chan<- Task_Unit, wg *sync.WaitGroup) {
-	var taskSlice []func(v int, ch chan<- Task_Unit, wg *sync.WaitGroup)
+func CreateTask(TasksCount int) []func(v int, ch chan<- Tracker_unit) {
+	var taskSlice []func(v int, ch chan<- Tracker_unit)
 
 	for i := 1; i <= TasksCount; i++ {
 
-		taskSlice = append(taskSlice, func(v int, ch chan<- Task_Unit, wg *sync.WaitGroup) {
-			defer wg.Done()
+		taskSlice = append(taskSlice, func(v int, ch chan<- Tracker_unit) {
 			start := time.Now()
 
 			oprs := 0
@@ -33,15 +25,15 @@ func CreateTask(TasksCount int) []func(v int, ch chan<- Task_Unit, wg *sync.Wait
 
 			// if the countFib func count more that 10 seconds
 			if time.Since(start) > time.Duration(8*time.Second) {
-				str := "To slow for count value : " + strconv.Itoa(v)
-				ch <- Task_Unit{unit: Tracker_unit{}, err: errors.New(str)}
+				//str := "To slow for count value : " + strconv.Itoa(v)
+				//ch <- Tracker_unit{status: errors.New(str)}
 			}
 
-			ch <- Task_Unit{unit: Tracker_unit{FibVal: v,
+			ch <- Tracker_unit{FibVal: v,
 				ExecutionResTime: time.Since(start),
 				FinResult:        resVal,
-				Operations:       oprs},
-				err: nil}
+				Operations:       oprs,
+				status:           nil}
 		})
 	}
 	return taskSlice
