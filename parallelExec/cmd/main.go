@@ -11,26 +11,38 @@ import (
 
 var WG_MAIN sync.WaitGroup
 
+func showTrackerUnits(units []crtk.Tracker_unit) {
+	sort.Slice(units, func(i, j int) bool {
+		return units[i].FibVal < units[j].FibVal
+	})
+
+	fmt.Println(len(units))
+	for _, value := range units {
+		if value.Status != nil {
+			fmt.Printf("value %d : result is %v\n", value.FibVal, value.Status)
+		} else {
+			fmt.Printf("value : %d result : %d operations: %d time: %v\n", value.FibVal, value.FinResult, value.Operations, value.ExecutionResTime)
+		}
+	}
+}
+
 func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount int, errors int) {
 
 	fmt.Println("Go")
 
 	ch := make(chan crtk.Tracker_unit, parallelCount)
-	fmt.Println(len(slc))
 	var resSlc []crtk.Tracker_unit
 
 	// run by bundles
 	counterProc := 0
 	errCount := 0
-	counter := 0
 
 	var wg sync.WaitGroup
 
 	// for panic case
 	defer func() {
-		fmt.Println("defer")
 		if r := recover(); r != nil {
-			//close(ch)
+			showTrackerUnits(resSlc)
 			resSlc = nil
 			fmt.Println("Recovered in parallelExec ", r)
 			WG_MAIN.Done()
@@ -53,11 +65,10 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount 
 
 			for x := range ch {
 				if x.Status != nil {
-					fmt.Println("err")
+					resSlc = append(resSlc, x)
 					errCount++
+					continue
 				} else {
-					counter++
-					//fmt.Printf("insert : %d result : %d operations: %d time: %v\n", x.FibVal, x.FinResult, x.Operations, x.ExecutionResTime)
 					resSlc = append(resSlc, x)
 				}
 			}
@@ -71,24 +82,16 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount 
 		}
 
 	}
-
-	sort.Slice(resSlc, func(i, j int) bool {
-		return resSlc[i].FibVal < resSlc[j].FibVal
-	})
-
-	for _, v := range resSlc {
-		fmt.Printf("value : %d result : %d operations: %d time: %v\n", v.FibVal, v.FinResult, v.Operations, v.ExecutionResTime)
-	}
-
+	showTrackerUnits(resSlc)
 	WG_MAIN.Done()
 }
 
 func main() {
 	start := time.Now()
-	tasks := crtk.CreateTask(55)
+	tasks := crtk.CreateTasks(50)
 	WG_MAIN.Add(1)
 
-	parallelExec(tasks, 10, 1)
+	parallelExec(tasks, 10, 5)
 	fmt.Printf("Execution time : %v\n", time.Since(start))
 	WG_MAIN.Wait()
 }
