@@ -15,28 +15,50 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount 
 
 	fmt.Println("Go")
 
-	ch := make(chan crtk.Tracker_unit, len(slc))
+	ch := make(chan crtk.Tracker_unit, parallelCount)
 	fmt.Println(len(slc))
+	var resSlc []crtk.Tracker_unit
+
+	// run by bundles
+	counterProc := 0
+	errCount := 0
+	counter := 0
 
 	var wg sync.WaitGroup
 	for i := 0; i < len(slc); i++ {
 		wg.Add(1)
-
-		go func(f func(v int, ch chan<- crtk.Tracker_unit)) {
-			v := i
+		v := i
+		go func(val int) {
 			defer wg.Done()
-			f(v, ch)
-		}(slc[i])
+			slc[val](val, ch)
+		}(v)
+		counterProc++
+
+		if counterProc >= parallelCount || len(slc)-i < parallelCount {
+			wg.Wait()
+			close(ch)
+
+			for x := range ch {
+				if x.Status != nil {
+					fmt.Println("err")
+					errCount++
+				} else {
+					counter++
+					//fmt.Printf("insert : %d result : %d operations: %d time: %v\n", x.FibVal, x.FinResult, x.Operations, x.ExecutionResTime)
+					resSlc = append(resSlc, x)
+				}
+			}
+			if errCount >= errors {
+				panic(fmt.Sprintf("Panic from parallelExec err errCount >= errors %d == %d", errCount, errors))
+			}
+
+			//fmt.Println(counter, i, counterProc)
+			ch = make(chan crtk.Tracker_unit, parallelCount)
+			counterProc = 0
+		}
 
 	}
-	wg.Wait()
 
-	close(ch)
-
-	var resSlc []crtk.Tracker_unit
-	for x := range ch {
-		resSlc = append(resSlc, x)
-	}
 	sort.Slice(resSlc, func(i, j int) bool {
 		return resSlc[i].FibVal < resSlc[j].FibVal
 	})
@@ -45,12 +67,23 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount 
 		fmt.Printf("value : %d result : %d operations: %d time: %v\n", v.FibVal, v.FinResult, v.Operations, v.ExecutionResTime)
 	}
 
+	// for panic case
+	defer func() {
+		if r := recover(); r != nil {
+			close(ch)
+			resSlc = nil
+			fmt.Println("Recovered in parallelExec", r)
+			WG_MAIN.Done()
+			return
+		}
+	}()
+
 	WG_MAIN.Done()
 }
 
 func main() {
 	start := time.Now()
-	tasks := crtk.CreateTask(45)
+	tasks := crtk.CreateTask(55)
 	WG_MAIN.Add(1)
 
 	parallelExec(tasks, 10, 3)
