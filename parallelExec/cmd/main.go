@@ -25,6 +25,19 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount 
 	counter := 0
 
 	var wg sync.WaitGroup
+
+	// for panic case
+	defer func() {
+		fmt.Println("defer")
+		if r := recover(); r != nil {
+			//close(ch)
+			resSlc = nil
+			fmt.Println("Recovered in parallelExec ", r)
+			WG_MAIN.Done()
+			return
+		}
+	}()
+
 	for i := 0; i < len(slc); i++ {
 		wg.Add(1)
 		v := i
@@ -67,17 +80,6 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount 
 		fmt.Printf("value : %d result : %d operations: %d time: %v\n", v.FibVal, v.FinResult, v.Operations, v.ExecutionResTime)
 	}
 
-	// for panic case
-	defer func() {
-		if r := recover(); r != nil {
-			close(ch)
-			resSlc = nil
-			fmt.Println("Recovered in parallelExec", r)
-			WG_MAIN.Done()
-			return
-		}
-	}()
-
 	WG_MAIN.Done()
 }
 
@@ -86,7 +88,7 @@ func main() {
 	tasks := crtk.CreateTask(55)
 	WG_MAIN.Add(1)
 
-	parallelExec(tasks, 10, 3)
+	parallelExec(tasks, 10, 1)
 	fmt.Printf("Execution time : %v\n", time.Since(start))
 	WG_MAIN.Wait()
 }
