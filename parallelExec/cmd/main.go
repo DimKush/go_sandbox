@@ -67,7 +67,6 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount 
 				if x.Status != nil {
 					resSlc = append(resSlc, x)
 					errCount++
-					continue
 				} else {
 					resSlc = append(resSlc, x)
 				}
@@ -75,8 +74,6 @@ func parallelExec(slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount 
 			if errCount >= errors {
 				panic(fmt.Sprintf("Panic from parallelExec err errCount >= errors %d == %d", errCount, errors))
 			}
-
-			//fmt.Println(counter, i, counterProc)
 			ch = make(chan crtk.Tracker_unit, parallelCount)
 			counterProc = 0
 		}
