@@ -23,7 +23,7 @@ func ShowTrackerUnits(units []crtk.Tracker_unit) {
 	}
 }
 
-func ParallelExec(wg_main *sync.WaitGroup, slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount int, errors int) {
+func ParallelExec(wg_main *sync.WaitGroup, slc []func(v int, ch chan<- crtk.Tracker_unit), parallelCount int, errors int) ([]crtk.Tracker_unit, error) {
 	fmt.Println("Go")
 
 	ch := make(chan crtk.Tracker_unit, parallelCount)
@@ -75,6 +75,10 @@ func ParallelExec(wg_main *sync.WaitGroup, slc []func(v int, ch chan<- crtk.Trac
 		}
 
 	}
-	ShowTrackerUnits(resSlc)
-	wg_main.Done()
+
+	//ShowTrackerUnits(resSlc)
+
+	defer wg_main.Done()
+
+	return resSlc, nil
 }

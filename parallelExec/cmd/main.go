@@ -15,7 +15,9 @@ func main() {
 	tasks := crtk.CreateTasks(50)
 	wg_main.Add(1)
 
-	tp.ParallelExec(&wg_main, tasks, 10, 5)
+	units, _ := tp.ParallelExec(&wg_main, tasks, 10, 5)
+	tp.ShowTrackerUnits(units)
+
 	fmt.Printf("Execution time : %v\n", time.Since(start))
 	wg_main.Wait()
 }
