@@ -17,7 +17,6 @@ func CreateTasks(TasksCount int) []func(v int, ch chan<- Tracker_unit) {
 	var taskSlice []func(v int, ch chan<- Tracker_unit)
 
 	for i := 0; i <= TasksCount; i++ {
-
 		taskSlice = append(taskSlice, func(v int, ch chan<- Tracker_unit) {
 			start := time.Now()
 
@@ -75,5 +74,4 @@ func countFib(val int, operations *int) int {
 	} else {
 		return countFib(val-1, operations) + countFib(val-2, operations)
 	}
-
 }
