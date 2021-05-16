@@ -8,7 +8,7 @@ import (
 type Handler struct{}
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	data, err := Asset("static/gopher.png")
+	data, err := Asset("../static/gopher.png")
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
