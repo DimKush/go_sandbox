@@ -1,7 +1,7 @@
 package student
 
-type Descilpine struct {
-	Descilpine string
+type Discipline struct {
+	Discipline string
 	Mark       int
 }
 
@@ -10,5 +10,5 @@ type Student struct {
 	FirstName string
 	LastName  string
 	Age       int
-	Marks     []Descilpine
+	Marks     []Discipline
 }

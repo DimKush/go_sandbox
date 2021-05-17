@@ -50,15 +50,15 @@ func easyjsonB83d7b77DecodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInt
 				in.Delim('[')
 				if out.Marks == nil {
 					if !in.IsDelim(']') {
-						out.Marks = make([]Descilpine, 0, 2)
+						out.Marks = make([]Discipline, 0, 2)
 					} else {
-						out.Marks = []Descilpine{}
+						out.Marks = []Discipline{}
 					}
 				} else {
 					out.Marks = (out.Marks)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v1 Descilpine
+					var v1 Discipline
 					(v1).UnmarshalEasyJSON(in)
 					out.Marks = append(out.Marks, v1)
 					in.WantComma()
@@ -136,7 +136,7 @@ func (v *Student) UnmarshalJSON(data []byte) error {
 func (v *Student) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB83d7b77DecodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent(l, v)
 }
-func easyjsonB83d7b77DecodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent1(in *jlexer.Lexer, out *Descilpine) {
+func easyjsonB83d7b77DecodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent1(in *jlexer.Lexer, out *Discipline) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -155,8 +155,8 @@ func easyjsonB83d7b77DecodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInt
 			continue
 		}
 		switch key {
-		case "Descilpine":
-			out.Descilpine = string(in.String())
+		case "Discipline":
+			out.Discipline = string(in.String())
 		case "Mark":
 			out.Mark = int(in.Int())
 		default:
@@ -169,14 +169,14 @@ func easyjsonB83d7b77DecodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInt
 		in.Consumed()
 	}
 }
-func easyjsonB83d7b77EncodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent1(out *jwriter.Writer, in Descilpine) {
+func easyjsonB83d7b77EncodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent1(out *jwriter.Writer, in Discipline) {
 	out.RawByte('{')
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"Descilpine\":"
+		const prefix string = ",\"Discipline\":"
 		out.RawString(prefix[1:])
-		out.String(string(in.Descilpine))
+		out.String(string(in.Discipline))
 	}
 	{
 		const prefix string = ",\"Mark\":"
@@ -187,25 +187,25 @@ func easyjsonB83d7b77EncodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInt
 }
 
 // MarshalJSON supports json.Marshaler interface
-func (v Descilpine) MarshalJSON() ([]byte, error) {
+func (v Discipline) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
 	easyjsonB83d7b77EncodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent1(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v Descilpine) MarshalEasyJSON(w *jwriter.Writer) {
+func (v Discipline) MarshalEasyJSON(w *jwriter.Writer) {
 	easyjsonB83d7b77EncodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent1(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *Descilpine) UnmarshalJSON(data []byte) error {
+func (v *Discipline) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjsonB83d7b77DecodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent1(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *Descilpine) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *Discipline) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB83d7b77DecodeGithubComDimKushGoSandboxTreeMainGeneratedEasyjsonInternalStudent1(l, v)
 }
