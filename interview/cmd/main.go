@@ -28,11 +28,12 @@ func oneThread() {
 	fmt.Println("----------------ONE THREAD----------------")
 	fmt.Println("runtime GOMAXPROCS : ", runtime.GOMAXPROCS(1))
 
-	fmt.Println(runtime.NumCPU())
+	fmt.Println("NumGoroutine", runtime.NumGoroutine())
 	//data := 10
 	ch := make(chan int)
 
 	go func() {
+		fmt.Println("NumGoroutine", runtime.NumGoroutine())
 		i := 0
 		for i = 0; i < 1000000000; i++ {
 		}
@@ -116,11 +117,29 @@ func concurencyMap() {
 // Как устроен слайс и чем он отличается от массива? В отличии от массива slice имеет capacity (т.е. текущую вместимость)
 // структура слайса такова {размер, указатель на беспрерывный кластер памяти, вместимость}
 
-//Нужно ли лочить структуру мьютексом, если идет конкуррентная запись в разные поля структуры? - я думаю, что не нужно
+//Нужно ли лочить структуру мьютексом, если идет конкуррентная запись в разные поля структуры? - я думаю, что не нужно но не всю структуру а только поле
+// куда пишет
+
+// qcount — количество элементов в буфере
+// dataqsiz — размерность буфера
+// buf — указатель на буфер для элементов канала
+// closed — флаг, указывающий, закрыт канал или нет
+// recvq — указатель на связанный список горутин, ожидающих чтения из канала
+// sendq -указатель на связанный список горутин, ожидающих запись в канал
+// lock — мьютекс для безопасного доступа к каналу
 
 func main() {
 	// oneThread()
-	whatIsString()
-	clueString()
-	concurencyMap()
+	// whatIsString()
+	// clueString()
+	// concurencyMap()
+
+	Tasks()
 }
+
+// const (
+// 	val1 = iota + 1
+// 	val2
+// 	val3
+// 	val4
+// )
