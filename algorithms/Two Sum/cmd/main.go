@@ -9,6 +9,8 @@ You can return the answer in any order.
 import (
 	"fmt"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 func twoSum(nums []int, target int) []int {
@@ -40,7 +42,16 @@ func twoSum(nums []int, target int) []int {
 //An integer is a palindrome when it reads the same backward as forward. For example, 121 is palindrome while 123 is not.
 
 func isPalindrome(x int) bool {
+	strNum := strconv.Itoa(x)
+	var strNumReverse strings.Builder
 
+	for i := len(strNum) - 1; i >= 0; i-- {
+		strNumReverse.WriteByte(strNum[i])
+	}
+
+	fmt.Println(strNum)
+	fmt.Println(strNumReverse.String())
+	return true
 }
 
 func main() {
@@ -49,4 +60,6 @@ func main() {
 	target := 9
 
 	fmt.Println(twoSum(nums, target))
+
+	isPalindrome(121)
 }
