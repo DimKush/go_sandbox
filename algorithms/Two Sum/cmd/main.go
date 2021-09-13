@@ -49,9 +49,11 @@ func isPalindrome(x int) bool {
 		strNumReverse.WriteByte(strNum[i])
 	}
 
-	fmt.Println(strNum)
-	fmt.Println(strNumReverse.String())
-	return true
+	if strNum == strNumReverse.String() {
+		return true
+	} else {
+		return false
+	}
 }
 
 func main() {
