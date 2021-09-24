@@ -2,5 +2,4 @@ module proto
 
 go 1.17
 
-require (
-)
+require google.golang.org/protobuf v1.27.1 // indirect
