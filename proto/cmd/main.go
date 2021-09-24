@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/DimKush/go_sandbox/tree/main/proto/internal/Person"
 	"google.golang.org/protobuf/proto"
 	"log"
 )

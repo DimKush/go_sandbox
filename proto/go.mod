@@ -1,4 +1,4 @@
-module proto
+module github.com/DimKush/go_sandbox/tree/main/proto
 
 go 1.17
 
