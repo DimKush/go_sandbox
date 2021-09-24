@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package main;
+
+option go_package = "./";
+
+
+enum Place {
+  UNSET = 0;
+  MOSCOW = 1;
+  SAINT_PETERSBURG = 2;
+}
+
+message People{
+  repeated Person person = 1;
+}
+
+message Person {
+  string Name = 1;
+  repeated Address address = 2;
+  repeated string mobile = 3;
+  repeated string email = 4;
+  Place place = 5;
+  map<string, Address> prevAddresses = 6;
+}
+
+message Address {
+  string street = 1;
+  int32 number = 2;
+}
