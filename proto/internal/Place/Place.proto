@@ -3,3 +3,6 @@ syntax = "proto3";
 option go_package = "../Place"; // change to change package name
 
 package Person;
+
+message Person{ 
+};
