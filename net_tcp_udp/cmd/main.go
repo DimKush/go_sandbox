@@ -11,7 +11,13 @@ import (
 func main(){
 	wg := sync.WaitGroup{}
 	ctx := context.Background()
-	ctx, _ = context.WithTimeout(ctx,time.Second * 2)
+
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	randTimer := time.Duration(rnd.Intn(5000)) * time.Microsecond
+
+	fmt.Printf("random time main : %s\n", randTimer)
+
+	ctx, _ = context.WithTimeout(ctx,randTimer)
 	wg.Add(1)
 
 	go dealLongWithCtx(&wg,ctx)
@@ -24,13 +30,16 @@ func dealLongWithCtx(wg * sync.WaitGroup, ctx context.Context){
 
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	randTimer := time.Duration(rnd.Intn(4000)) * time.Microsecond
+	randTimer := time.Duration(rnd.Intn(5000)) * time.Microsecond
+
+	fmt.Printf("random time : %s\n", randTimer)
+
 	timer := time.NewTimer(randTimer)
 	select{
-		case <-ctx.Done():{
+		case <-ctx.Done(): {
 			fmt.Println("Rejected")
 		}
-		case <-timer.C :{
+		case <-timer.C: {
 			fmt.Println("Done")
 		}
 	}
