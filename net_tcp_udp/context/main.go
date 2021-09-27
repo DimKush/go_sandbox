@@ -17,11 +17,12 @@ func main(){
 
 	fmt.Printf("random time main : %s\n", randTimer)
 
-	ctx, _ = context.WithTimeout(ctx,randTimer)
+	ctx, cancel := context.WithTimeout(ctx,time.Second*60)
 	wg.Add(1)
 
 	go dealLongWithCtx(&wg,ctx)
-
+	time.Sleep(time.Second)
+	cancel()
 	wg.Wait()
 }
 
