@@ -11,7 +11,7 @@ import (
 
 func emulateLongOperation(ctx context.Context, id int){
 	randVal := rand.Intn(5000)
-	randTime := time.Duration(randVal) * time.Microsecond
+	randTime := time.Duration(randVal) * time.Millisecond
 	log.Printf("Id %d will be evalutated for %d", id, randVal)
 	timer := time.NewTimer(randTime)
 
@@ -20,7 +20,7 @@ func emulateLongOperation(ctx context.Context, id int){
 			fmt.Printf("Successfully finished job %d\n", id)
 		}
 		case <-ctx.Done() : {
-			fmt.Printf("id %d timed out", id)
+			fmt.Printf("id %d timed out\n", id)
 		}
 	}
 }
@@ -36,8 +36,6 @@ func main(){
 		}(i)
 	}
 
-	for i:= 0 ; i < 10; i++ {
-		wg.Wait()
-	}
+	wg.Wait()
 
 }
