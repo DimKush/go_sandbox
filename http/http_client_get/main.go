@@ -1,13 +1,16 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
 )
 
-func main(){
+func getRequestClient(){
 	client := http.Client{}
 
 	reqArgs := url.Values{}
@@ -35,4 +38,34 @@ func main(){
 	}
 
 	fmt.Printf("urlAddress %s responced with code : %d \n", urlAddress, resp.StatusCode)
+}
+
+type addRequest struct {
+	Id 		 int `json:"id"`
+	Title string `json:"title"`
+	Text  string `json:"text"`
+}
+
+func postRequestClient(){
+	client := &http.Client{}
+
+	addReq := &addRequest {
+		Id : 123,
+		Title : "for loop",
+		Text : "text",
+	}
+
+	var body bytes.Buffer
+	json.NewEncoder(body).Encode(addReq)
+	
+	req , err := http.NewRequest("POST", "https://google.com", body)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+
+	resp, err := client.Do(req)
+}
+
+func main(){
+
 }
