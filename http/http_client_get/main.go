@@ -64,6 +64,7 @@ func postRequestClient(){
 	}
 
 	resp, err := client.Do(req)
+
 }
 
 func main(){
