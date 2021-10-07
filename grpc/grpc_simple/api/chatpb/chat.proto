@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package  chatpb.v1;
+
+option go_package="github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb;chatpb_v1";
+
+message ChatMessage{
+  uint64 id = 1;
+  string text = 2;
+  reserved 3;
+}
+
