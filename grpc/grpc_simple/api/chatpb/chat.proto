@@ -1,8 +1,15 @@
+// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative helloworld/helloworld.proto
+
 syntax = "proto3";
 
 package  chatpb.v1;
 
 option go_package="github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb;chatpb_v1";
+
+service Client {
+  // Sends a greeting
+  rpc SayHello (ChatMessage) returns (ChatAnswer) {}
+}
 
 message ChatMessage{
   uint64 id = 1;
@@ -10,3 +17,6 @@ message ChatMessage{
   reserved 3;
 }
 
+message ChatAnswer{
+  string answer = 1;
+}
