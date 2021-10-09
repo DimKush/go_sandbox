@@ -2,23 +2,28 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
 
 	"google.golang.org/grpc"
-	pb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb_v1"
+	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb"
 )
 
 const (
-	port = ":80821"
+	port = ":8082"
 )
 
-func main(){
-
+type server struct {
+	chatpb.UnimplementedGreetingSampleServer
 }
 
-type server struct {
-	pb.UnimplementedGreetingSampleServer
+
+func main(){
+	if  err := run("tcp", port); err != nil {
+		fmt.Printf("Critical error during execute run func tcp on port %s Reason: %v", port, err)
+		os.Exit(1)
+	}
 }
 
 func run(network string, port string) error {
@@ -29,6 +34,10 @@ func run(network string, port string) error {
 	}
 
 	grpcNode := grpc.NewServer()
-
+	chatpb.RegisterGreetingSampleServer(grpcNode, &server{})
+	log.Printf("server listening at %v", listener.Addr())
+	if err := grpcNode.Serve(listener); err != nil {
+		return err
+	}
 	return nil
 }
