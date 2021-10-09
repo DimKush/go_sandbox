@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"google.golang.org/grpc"
-	""
+	pb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb_v1"
 )
 
 const (
@@ -29,5 +29,6 @@ func run(network string, port string) error {
 	}
 
 	grpcNode := grpc.NewServer()
+
 	return nil
 }
