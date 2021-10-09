@@ -14,88 +14,88 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// ClientClient is the client API for Client service.
+// GreetingSampleClient is the client API for GreetingSample service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ClientClient interface {
+type GreetingSampleClient interface {
 	// Sends a greeting
 	SayHello(ctx context.Context, in *ChatMessage, opts ...grpc.CallOption) (*ChatAnswer, error)
 }
 
-type clientClient struct {
+type greetingSampleClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewClientClient(cc grpc.ClientConnInterface) ClientClient {
-	return &clientClient{cc}
+func NewGreetingSampleClient(cc grpc.ClientConnInterface) GreetingSampleClient {
+	return &greetingSampleClient{cc}
 }
 
-func (c *clientClient) SayHello(ctx context.Context, in *ChatMessage, opts ...grpc.CallOption) (*ChatAnswer, error) {
+func (c *greetingSampleClient) SayHello(ctx context.Context, in *ChatMessage, opts ...grpc.CallOption) (*ChatAnswer, error) {
 	out := new(ChatAnswer)
-	err := c.cc.Invoke(ctx, "/chatpb.v1.Client/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/chatpb.v1.GreetingSample/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ClientServer is the server API for Client service.
-// All implementations must embed UnimplementedClientServer
+// GreetingSampleServer is the server API for GreetingSample service.
+// All implementations must embed UnimplementedGreetingSampleServer
 // for forward compatibility
-type ClientServer interface {
+type GreetingSampleServer interface {
 	// Sends a greeting
 	SayHello(context.Context, *ChatMessage) (*ChatAnswer, error)
-	mustEmbedUnimplementedClientServer()
+	mustEmbedUnimplementedGreetingSampleServer()
 }
 
-// UnimplementedClientServer must be embedded to have forward compatible implementations.
-type UnimplementedClientServer struct {
+// UnimplementedGreetingSampleServer must be embedded to have forward compatible implementations.
+type UnimplementedGreetingSampleServer struct {
 }
 
-func (UnimplementedClientServer) SayHello(context.Context, *ChatMessage) (*ChatAnswer, error) {
+func (UnimplementedGreetingSampleServer) SayHello(context.Context, *ChatMessage) (*ChatAnswer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
-func (UnimplementedClientServer) mustEmbedUnimplementedClientServer() {}
+func (UnimplementedGreetingSampleServer) mustEmbedUnimplementedGreetingSampleServer() {}
 
-// UnsafeClientServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ClientServer will
+// UnsafeGreetingSampleServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to GreetingSampleServer will
 // result in compilation errors.
-type UnsafeClientServer interface {
-	mustEmbedUnimplementedClientServer()
+type UnsafeGreetingSampleServer interface {
+	mustEmbedUnimplementedGreetingSampleServer()
 }
 
-func RegisterClientServer(s grpc.ServiceRegistrar, srv ClientServer) {
-	s.RegisterService(&Client_ServiceDesc, srv)
+func RegisterGreetingSampleServer(s grpc.ServiceRegistrar, srv GreetingSampleServer) {
+	s.RegisterService(&GreetingSample_ServiceDesc, srv)
 }
 
-func _Client_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _GreetingSample_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ChatMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClientServer).SayHello(ctx, in)
+		return srv.(GreetingSampleServer).SayHello(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/chatpb.v1.Client/SayHello",
+		FullMethod: "/chatpb.v1.GreetingSample/SayHello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClientServer).SayHello(ctx, req.(*ChatMessage))
+		return srv.(GreetingSampleServer).SayHello(ctx, req.(*ChatMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Client_ServiceDesc is the grpc.ServiceDesc for Client service.
+// GreetingSample_ServiceDesc is the grpc.ServiceDesc for GreetingSample service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Client_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "chatpb.v1.Client",
-	HandlerType: (*ClientServer)(nil),
+var GreetingSample_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "chatpb.v1.GreetingSample",
+	HandlerType: (*GreetingSampleServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "SayHello",
-			Handler:    _Client_SayHello_Handler,
+			Handler:    _GreetingSample_SayHello_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
