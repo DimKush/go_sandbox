@@ -8,11 +8,9 @@ import (
 
 	"google.golang.org/grpc"
 	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb"
+	server "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/server"
 )
 
-const (
-	port = ":8082"
-)
 
 type server struct {
 	chatpb.UnimplementedGreetingSampleServer
