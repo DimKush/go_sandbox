@@ -1,13 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
 	"os"
 
-	"google.golang.org/grpc"
 	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb"
+	"google.golang.org/grpc"
 )
 
 const (
@@ -18,6 +19,10 @@ type server struct {
 	chatpb.UnimplementedGreetingSampleServer
 }
 
+func(s *server) SayHello(ctx context.Context, in *chatpb.ChatMessage) (*chatpb.ChatAnswer, error) {
+	log.Printf("Received %s", in.GetText())
+	return &chatpb.ChatAnswer{Answer: " server answer"}, nil
+}
 
 func main(){
 	if  err := run("tcp", port); err != nil {
