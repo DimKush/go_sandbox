@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb"
-	"google.golang.org/grpc"
 	"sync"
 	"time"
+
+	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb"
+	"google.golang.org/grpc"
 )
 
 const (
@@ -38,27 +39,28 @@ func runClient(requestCounts int) error{
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 2)
 	defer cancel()
 
-	chAnswer := make(chan *serverAnswer, 10)
+	chAnswer := make(chan *serverAnswer, requestCounts)
 
-	wg := sync.WaitGroup{}
+	var wg sync.WaitGroup
+
 	wg.Add(requestCounts)
 
 	var answers []*serverAnswer
 	for i := 0 ; i < requestCounts ; i++ {
-		time.Sleep(2 * time.Second)
-		go func(i int){
+		go func(i int, wg *sync.WaitGroup){
 			defer wg.Done()
 			r, err := clnt.SayHello(ctx, &chatpb.ChatMessage{Id: uint64(i), Text: fmt.Sprintf("Hello number %d", i)})
 			if err != nil {
 				chAnswer <- &serverAnswer{nil, err}
 			}
 			chAnswer <- &serverAnswer{r, err}
-		}(i)
+		}(i, &wg)
 	}
 
 	wg.Wait()
+	close(chAnswer)
 
-	for x := range chAnswer {
+	 for x := range chAnswer {
 		answers = append(answers, x)
 	}
 
