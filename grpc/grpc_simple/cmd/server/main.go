@@ -21,7 +21,7 @@ type server struct {
 
 func(s *server) SayHello(ctx context.Context, in *chatpb.ChatMessage) (*chatpb.ChatAnswer, error) {
 	log.Printf("Received %s", in.GetText())
-	return &chatpb.ChatAnswer{Answer: " server answer"}, nil
+	return &chatpb.ChatAnswer{Answer: fmt.Sprintf("server answered %d", in.GetId())}, nil
 }
 
 func main(){
