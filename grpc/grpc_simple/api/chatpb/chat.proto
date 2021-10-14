@@ -16,6 +16,11 @@ message ChatMessage{
   reserved 3;
 }
 
+message ChatMessageSecond{
+  uint64 id = 1;
+  string text = 2;
+}
+
 message ChatAnswer{
   uint64 id_answer = 1;
   string answer = 2;
