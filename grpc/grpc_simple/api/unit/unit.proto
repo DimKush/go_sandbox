@@ -1,0 +1,34 @@
+// protoc --go_out=./pkg --go_opt=paths=source_relative --go-grpc_out=./pkg --go-grpc_opt=paths=source_relative ./api/chatpb/chat.proto
+syntax = "proto3";
+
+package  uint.v1;
+
+option go_package="github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/unit;unit_v1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service GreetingSample {
+  // Sends a greeting
+  rpc GetUnitById (UnitId) returns (UnitsParamsResponce) {
+    option(google.api.http) = {
+      get: "/v1/{unit_id}"
+    };
+  }
+}
+
+message UnitId{
+  uint64 unit_id = 1;
+}
+
+message UnitsParamsResponce {
+  uint64 id = 1;
+  string unit_name = 2;
+  string description = 3;
+  reserved 4;
+  enum Status{
+    OK = 0;
+    ERROR = 1;
+    UNKNOWN = 2;
+  };
+}
