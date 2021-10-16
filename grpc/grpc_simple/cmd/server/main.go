@@ -7,7 +7,7 @@ import (
 	"net"
 	"os"
 
-	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/chatpb"
+	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/api/chatpb"
 	"google.golang.org/grpc"
 )
 
