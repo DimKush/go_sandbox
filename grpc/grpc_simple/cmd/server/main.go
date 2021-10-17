@@ -8,7 +8,7 @@ import (
 	"os"
 
 	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/api/chatpb"
-	
+	"github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/tools"
 	"google.golang.org/grpc"
 )
 
