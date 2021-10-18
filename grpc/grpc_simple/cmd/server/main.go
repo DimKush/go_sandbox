@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"os"
 
-	chatpb "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/api/chatpb"
-	"github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/tools"
+	unit "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/api/unit"
 	"google.golang.org/grpc"
 )
 
@@ -17,16 +17,28 @@ const (
 )
 
 type server struct {
-	chatpb.UnimplementedGreetingSampleServer
+	unit.UnimplementedGreetingSampleServer
 }
 
-func(s *server) SayHello(ctx context.Context, in *chatpb.ChatMessage) (*chatpb.ChatAnswer, error) {
-	log.Printf("Received %s", in.GetText())
-	return &chatpb.ChatAnswer{Answer: fmt.Sprintf("server answered %d", in.GetId())}, nil
+func (s *server) SayHello(ctx context.Context, in *unit.UnitId) (*unit.UnitsParamsResponce, error) {
+	id := in.GetUnitId()
+	if id == 0 {
+		error := &unit.Error{
+			Status: http.StatusBadRequest,
+			Error:  "Bad request",
+		}
+		return &unit.UnitsParamsResponce{
+			Id:          uint64(0),
+			UnitName:    "",
+			Description: "",
+			Error:       error,
+		}, nil
+	}
+
 }
 
-func main(){
-	if  err := run("tcp", port); err != nil {
+func main() {
+	if err := run("tcp", port); err != nil {
 		fmt.Printf("Critical error during execute run func tcp on port %s Reason: %v", port, err)
 		os.Exit(1)
 	}
