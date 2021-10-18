@@ -25,7 +25,7 @@
           "default": {
             "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/gatewayruntimeError"
             }
           }
         },
@@ -45,19 +45,7 @@
     }
   },
   "definitions": {
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "type_url": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "runtimeError": {
+    "gatewayruntimeError": {
       "type": "object",
       "properties": {
         "error": {
@@ -78,6 +66,30 @@
         }
       }
     },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "uintv1Error": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
     "v1UnitsParamsResponce": {
       "type": "object",
       "properties": {
@@ -90,6 +102,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "error": {
+          "$ref": "#/definitions/uintv1Error"
         }
       }
     }
