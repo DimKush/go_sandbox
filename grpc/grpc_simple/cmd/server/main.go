@@ -20,14 +20,14 @@ type server struct {
 	unit.UnimplementedGreetingSampleServer
 }
 
-func (s *server) SayHello(ctx context.Context, in *unit.UnitId) (*unit.UnitsParamsResponce, error) {
+func (s *server) GetUnitById(ctx context.Context, in *unit.UnitId) (*unit.UnitsResponce, error) {
 	id := in.GetUnitId()
 	if id == 0 {
 		error := &unit.Error{
 			Status: http.StatusBadRequest,
 			Error:  "Bad request",
 		}
-		return &unit.UnitsParamsResponce{
+		return &unit.UnitsResponce{
 			Id:          uint64(0),
 			UnitName:    "",
 			Description: "",

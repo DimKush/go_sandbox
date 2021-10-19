@@ -19,7 +19,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UnitsParamsResponce"
+              "$ref": "#/definitions/v1UnitsResponce"
             }
           },
           "default": {
@@ -90,7 +90,7 @@
         }
       }
     },
-    "v1UnitsParamsResponce": {
+    "v1UnitsResponce": {
       "type": "object",
       "properties": {
         "id": {

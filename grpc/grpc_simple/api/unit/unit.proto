@@ -9,7 +9,7 @@ import "google/api/annotations.proto";
 
 service GreetingSample {
   // Sends a greeting
-  rpc GetUnitById (UnitId) returns (UnitsParamsResponce) {
+  rpc GetUnitById (UnitId) returns (UnitsResponce) {
     option(google.api.http) = {
       get: "/v1/{unit_id}"
     };
@@ -25,7 +25,7 @@ message Error{
   string error = 2;
 }
 
-message UnitsParamsResponce {
+message UnitsResponce {
   uint64 id = 1;
   string unit_name = 2;
   string description = 3;

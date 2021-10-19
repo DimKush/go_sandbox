@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GreetingSampleClient interface {
 	// Sends a greeting
-	GetUnitById(ctx context.Context, in *UnitId, opts ...grpc.CallOption) (*UnitsParamsResponce, error)
+	GetUnitById(ctx context.Context, in *UnitId, opts ...grpc.CallOption) (*UnitsResponce, error)
 }
 
 type greetingSampleClient struct {
@@ -30,8 +30,8 @@ func NewGreetingSampleClient(cc grpc.ClientConnInterface) GreetingSampleClient {
 	return &greetingSampleClient{cc}
 }
 
-func (c *greetingSampleClient) GetUnitById(ctx context.Context, in *UnitId, opts ...grpc.CallOption) (*UnitsParamsResponce, error) {
-	out := new(UnitsParamsResponce)
+func (c *greetingSampleClient) GetUnitById(ctx context.Context, in *UnitId, opts ...grpc.CallOption) (*UnitsResponce, error) {
+	out := new(UnitsResponce)
 	err := c.cc.Invoke(ctx, "/uint.v1.GreetingSample/GetUnitById", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (c *greetingSampleClient) GetUnitById(ctx context.Context, in *UnitId, opts
 // for forward compatibility
 type GreetingSampleServer interface {
 	// Sends a greeting
-	GetUnitById(context.Context, *UnitId) (*UnitsParamsResponce, error)
+	GetUnitById(context.Context, *UnitId) (*UnitsResponce, error)
 	mustEmbedUnimplementedGreetingSampleServer()
 }
 
@@ -52,7 +52,7 @@ type GreetingSampleServer interface {
 type UnimplementedGreetingSampleServer struct {
 }
 
-func (UnimplementedGreetingSampleServer) GetUnitById(context.Context, *UnitId) (*UnitsParamsResponce, error) {
+func (UnimplementedGreetingSampleServer) GetUnitById(context.Context, *UnitId) (*UnitsResponce, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUnitById not implemented")
 }
 func (UnimplementedGreetingSampleServer) mustEmbedUnimplementedGreetingSampleServer() {}
