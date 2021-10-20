@@ -35,6 +35,13 @@ func (s *server) GetUnitById(ctx context.Context, in *unit.UnitId) (*unit.UnitsR
 		}, nil
 	}
 
+	return &unit.UnitsResponce{
+		Id:          uint64(0),
+		UnitName:    "",
+		Description: "",
+		Error:       nil,
+	}, nil
+
 }
 
 func main() {
