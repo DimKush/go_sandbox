@@ -22,25 +22,6 @@ type server struct {
 
 func (s *server) GetUnitById(ctx context.Context, in *unit.UnitId) (*unit.UnitsResponce, error) {
 	id := in.GetUnitId()
-	if id == 0 {
-		error := &unit.Error{
-			Status: http.StatusBadRequest,
-			Error:  "Bad request",
-		}
-		return &unit.UnitsResponce{
-			Id:          uint64(0),
-			UnitName:    "",
-			Description: "",
-			Error:       error,
-		}, nil
-	}
-
-	return &unit.UnitsResponce{
-		Id:          uint64(0),
-		UnitName:    "",
-		Description: "",
-		Error:       nil,
-	}, nil
 
 }
 
@@ -59,7 +40,7 @@ func run(network string, port string) error {
 	}
 
 	grpcNode := grpc.NewServer()
-	chatpb.RegisterGreetingSampleServer(grpcNode, &server{})
+	unit.RegisterGreetingSampleServer(grpcNode, &server{})
 	log.Printf("server listening at %v", listener.Addr())
 	if err := grpcNode.Serve(listener); err != nil {
 		return err

@@ -29,6 +29,5 @@ message UnitsResponce {
   uint64 id = 1;
   string unit_name = 2;
   string description = 3;
-  Error  error = 4;
 }
 
