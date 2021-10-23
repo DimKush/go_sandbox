@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/http"
 	"os"
+	"sort"
 
 	unit "github.com/DimKush/go_sandbox/tree/main/grpc/grpc_simple/pkg/api/unit"
 	"google.golang.org/grpc"
@@ -16,32 +16,34 @@ const (
 	port = ":8082"
 )
 
+type UnitSample struct {
+	Id          uint64
+	UnitName    string
+	Description string
+}
+
+func initRandomCollection() []UnitSample {
+	var units []UnitSample
+	for i := 0; i < 10000; i++ {
+		units = append(units, UnitSample{Id: uint64(i), UnitName: fmt.Sprintf("Name %d", i), Description: fmt.Sprintf("Description %d", i)})
+	}
+
+	return units
+}
+
 type server struct {
 	unit.UnimplementedGreetingSampleServer
 }
 
 func (s *server) GetUnitById(ctx context.Context, in *unit.UnitId) (*unit.UnitsResponce, error) {
 	id := in.GetUnitId()
-	if id == 0 {
-		error := &unit.Error{
-			Status: http.StatusBadRequest,
-			Error:  "Bad request",
-		}
-		return &unit.UnitsResponce{
-			Id:          uint64(0),
-			UnitName:    "",
-			Description: "",
-			Error:       error,
-		}, nil
-	}
 
-	return &unit.UnitsResponce{
-		Id:          uint64(0),
-		UnitName:    "",
-		Description: "",
-		Error:       nil,
-	}, nil
+	units := initRandomCollection()
+	idx := sort.Search(len(units), func(i int) bool {
+		return units[i].Id == id
+	})
 
+	return &unit.UnitsResponce{Id: units[idx].Id, UnitName: units[idx].UnitName, Description: units[idx].Description}, nil
 }
 
 func main() {
@@ -59,7 +61,7 @@ func run(network string, port string) error {
 	}
 
 	grpcNode := grpc.NewServer()
-	chatpb.RegisterGreetingSampleServer(grpcNode, &server{})
+	unit.RegisterGreetingSampleServer(grpcNode, &server{})
 	log.Printf("server listening at %v", listener.Addr())
 	if err := grpcNode.Serve(listener); err != nil {
 		return err

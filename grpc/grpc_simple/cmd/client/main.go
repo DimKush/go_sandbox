@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	host = "localhost"
-	port = ":8082"
+	host         = "localhost"
+	port         = ":8082"
 	full_address = host + port
 )
 
@@ -21,13 +21,13 @@ func main() {
 }
 
 type serverAnswer struct {
-	 *chatpb.ChatAnswer
-	 err error
+	*chatpb.ChatAnswer
+	err error
 }
 
-func runClient(requestCounts int) error{
+func runClient(requestCounts int) error {
 	connect, err := grpc.Dial(full_address, grpc.WithInsecure(), grpc.WithBlock())
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -36,7 +36,7 @@ func runClient(requestCounts int) error{
 	clnt := chatpb.NewGreetingSampleClient(connect)
 
 	//ch := make(chan )
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 2)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
 	defer cancel()
 
 	chAnswer := make(chan *serverAnswer, requestCounts)
@@ -46,8 +46,8 @@ func runClient(requestCounts int) error{
 	wg.Add(requestCounts)
 
 	var answers []*serverAnswer
-	for i := 0 ; i < requestCounts ; i++ {
-		go func(i int, wg *sync.WaitGroup){
+	for i := 0; i < requestCounts; i++ {
+		go func(i int, wg *sync.WaitGroup) {
 			defer wg.Done()
 			r, err := clnt.SayHello(ctx, &chatpb.ChatMessage{Id: uint64(i), Text: fmt.Sprintf("Hello number %d", i)})
 			if err != nil {
@@ -60,7 +60,7 @@ func runClient(requestCounts int) error{
 	wg.Wait()
 	close(chAnswer)
 
-	 for x := range chAnswer {
+	for x := range chAnswer {
 		answers = append(answers, x)
 	}
 
@@ -69,13 +69,14 @@ func runClient(requestCounts int) error{
 	}
 
 	var countErrs, countAnswers int
-	for i := 0 ; i < len(answers); i++ {
+	for i := 0; i < len(answers); i++ {
 		if answers[i].err != nil {
 			fmt.Printf("Error : %v\n", answers[i].err)
 			countErrs++
 		} else {
 			fmt.Printf("Answer is : %v\n", answers[i].GetAnswer())
 			countAnswers++
+
 		}
 	}
 
